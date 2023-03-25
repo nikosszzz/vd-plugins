@@ -2,20 +2,6 @@ import { logger } from "@vendetta";
 import { registerCommand } from "@vendetta/commands";
 import { findByProps } from "@vendetta/metro";
 
-enum ApplicationCommandOptionType {
-    SUB_COMMAND = 1,
-    SUB_COMMAND_GROUP,
-    STRING,
-    INTEGER,
-    BOOLEAN,
-    USER6,
-    CHANNEL,
-    ROLE,
-    MENTIONABLE,
-    NUMBER,
-    ATTACHMENT
-}
-
 export default {
     onLoad: () => {
         let commands = [];
@@ -27,10 +13,10 @@ export default {
             displayName: "invitecreate",
             description: "Generates a friend invite link.",
             displayDescription: "Generates a friend invite link.",
-            type: ApplicationCommandType.CHAT,
+            type: 1,
             //@ts-ignore
             applicationId: -1,
-            inputType: ApplicationCommandInputType.BUILT_IN,
+            inputType: 1,
             execute: async (_, ctx) => {
                 const createInvite = await inviteModule.createFriendInvite();
                 const message = `
@@ -48,10 +34,9 @@ export default {
             displayName: "viewinvites",
             description: "View your current friend invite links that you've made.",
             displayDescription: "View your current friend invite links that you've made.",
-            type: ApplicationCommandType.CHAT,
+            type: 1,
             //@ts-ignore
             applicationId: -1,
-            inputType: ApplicationCommandInputType.BUILT_IN,
             execute: async (_, ctx) => {
                 const invites = await inviteModule.getAllFriendInvites();
                 const friendInviteList = invites.map(i =>
@@ -69,10 +54,10 @@ export default {
             displayName: "revokeinvites",
             description: "Revoke all your friend invite links.",
             displayDescription: "Revoke all your friend invite links.",
-            type: ApplicationCommandType.CHAT,
+            type: 1,
             //@ts-ignore
             applicationId: -1,
-            inputType: ApplicationCommandInputType.BUILT_IN,
+            inputType: 1,
             execute: async (_, ctx) => {
                 await findByProps("createFriendInvite").revokeFriendInvites();
 
