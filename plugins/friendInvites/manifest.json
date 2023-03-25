@@ -1,0 +1,14 @@
+{
+    "name": "FriendInvites",
+    "description": "Lets you make invite links for people to add you as their friend on Discord.",
+    "authors": [
+        {
+            "name": "nikosszzz",
+            "id": "327065865201909762"
+        }
+    ],
+    "main": "src/index.ts",
+    "vendetta": {
+        "icon": "ic_add_friend"
+    }
+}
