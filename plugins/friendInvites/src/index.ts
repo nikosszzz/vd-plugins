@@ -9,6 +9,8 @@ export default {
         try {
             const ClydeUtils = findByProps("sendBotMessage");
             const inviteModule = findByProps("getAllFriendInvites");
+            const api = findByProps("get", "post")
+
 
             commands.push(registerCommand({
                 name: "invite create",
@@ -20,11 +22,11 @@ export default {
                 applicationId: -1,
                 inputType: 1,
                 execute: async (_, ctx) => {
-                    const createInvite = await inviteModule.createFriendInvite();
+                    const random = findByProps("sortedIndex").random(1000)
+                    const createInvite = await api.post({ url: '/friend-finder/find-friends', body: { modified_contacts: { [random]: [1, '', ''] } } }).then(x => inviteModule.createFriendInvite({ "code": x.body.invite_suggestions[0][3], "recipient_phone_number_or_email": random }));
                     const message = `
                         https://discord.gg/${createInvite.code} ·
                         Expires: <t:${new Date(createInvite.expires_at).getTime() / 1000}:R> ·
-                        Max uses: \`${createInvite.max_uses}\`
                     `.trim().replace(/\s+/g, " ")
 
                     ClydeUtils.sendBotMessage(ctx.channel.id, message);
