@@ -11,7 +11,6 @@ export default {
             const inviteModule = findByProps("getAllFriendInvites");
             const api = findByProps("get", "post")
 
-
             commands.push(registerCommand({
                 name: "invite create",
                 displayName: "invite create",
@@ -22,7 +21,8 @@ export default {
                 applicationId: -1,
                 inputType: 1,
                 execute: async (_, ctx) => {
-                    const random = findByProps("sortedIndex").random(1000)
+                    if (!findByProps("getCurrentUser").getCurrentUser().phone) return ClydeUtils.sendBotMessage(ctx.channel.id, "You need to have a phone number connected to your account to create a friend invite!");
+                    const random = findByProps("v4").v4()
                     const createInvite = await api.post({ url: '/friend-finder/find-friends', body: { modified_contacts: { [random]: [1, '', ''] } } }).then(x => inviteModule.createFriendInvite({ "code": x.body.invite_suggestions[0][3], "recipient_phone_number_or_email": random }));
                     const message = `
                         https://discord.gg/${createInvite.code} ·
