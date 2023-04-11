@@ -21,9 +21,27 @@ export default {
                 applicationId: -1,
                 inputType: 1,
                 execute: async (_, ctx) => {
-                    if (!findByProps("getCurrentUser").getCurrentUser().phone) return ClydeUtils.sendBotMessage(ctx.channel.id, "You need to have a phone number connected to your account to create a friend invite!");
-                    const random = findByProps("v4").v4()
-                    const createInvite = await api.post({ url: '/friend-finder/find-friends', body: { modified_contacts: { [random]: [1, '', ''] } } }).then(x => inviteModule.createFriendInvite({ "code": x.body.invite_suggestions[0][3], "recipient_phone_number_or_email": random }));
+                    if (!findByProps("getCurrentUser").getCurrentUser().phone) 
+                        return ClydeUtils.sendBotMessage(ctx.channel.id, "You need to have a phone number connected to your account to create a friend invite!");
+                    
+                    const uuid = findByProps("v4").v4()
+                    const createInvite = await api.post({
+                        url: "/friend-finder/find-friends",
+                        body: {
+                            modified_contacts: {
+                                [uuid]: [1, "", ""]
+                            },
+                            phone_contact_methods_count: 1
+                        }
+                    }).then(res =>
+                        inviteModule.createFriendInvite({
+                            code: res.body.invite_suggestions[0][3],
+                            recipient_phone_number_or_email: uuid,
+                            contact_visibility: 1,
+                            filter_visibilities: [],
+                            filtered_invite_suggestions_index: 1
+                        })
+                    );
                     const message = `
                         https://discord.gg/${createInvite.code} ·
                         Expires: <t:${new Date(createInvite.expires_at).getTime() / 1000}:R> ·
